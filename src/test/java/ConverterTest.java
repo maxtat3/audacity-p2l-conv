@@ -108,21 +108,21 @@ public class ConverterTest {
 
 
 	@Test
-	public void testIsCorrectPlaylistLine_lineLengthIs0() {
+	public void testCheckCorrectPlaylistLine_lineLengthIs0() {
 		String s = "";
 		String res = new Converter().checkCorrectPlaylistLine(s);
 		Assert.assertEquals("-1", res);
 	}
 
 	@Test
-	public void testIsCorrectPlaylistLine_lineContainSomeText() {
+	public void testCheckCorrectPlaylistLine_lineContainSomeText() {
 		String s = "abcdeuo";
 		String res = new Converter().checkCorrectPlaylistLine(s);
 		Assert.assertThat(res, CoreMatchers.containsString("must be separated bt TAB character"));
 	}
 
 	@Test
-	public void testIsCorrectPlaylistLine_lineCorrect() {
+	public void testCheckCorrectPlaylistLine_lineCorrect() {
 		String s = "07:01\t3. ghk";
 		String res = new Converter().checkCorrectPlaylistLine(s);
 		Assert.assertEquals("1", res);
@@ -130,7 +130,7 @@ public class ConverterTest {
 
 
 	@Test
-	public void testIsCorrectPlaylistLine_lineContainManyTabs() {
+	public void testCheckCorrectPlaylistLine_lineContainManyTabs() {
 		String s = "07:01\t1. audio\ttrack name\t";
 		String res = new Converter().checkCorrectPlaylistLine(s);
 		Assert.assertEquals("1", res);
