@@ -74,6 +74,20 @@ public class Converter {
 
 	/**
 
+
+	public static final String COMMENT_TYPE_1 = "//";
+	public static final String COMMENT_TYPE_2 = "#";
+
+	/**
+	 * Check is start line with comment.
+	 *
+	 * @param line checking text line.
+	 * @return <tt>true</tt> line started with comment, otherwise <tt>false</tt>.
+	 */
+	public boolean isStartLineWithComment(String line) {
+		return line.startsWith(COMMENT_TYPE_1) || line.startsWith(COMMENT_TYPE_2);
+	}
+
 	/**
 	 * Remove comments from text line.
 	 * Supported comment symbols: // and #
@@ -82,9 +96,6 @@ public class Converter {
 	 * @return useful text
 	 */
 	public String removeComment(String line) {
-		String COMMENT_TYPE_1 = "//";
-		String COMMENT_TYPE_2 = "#";
-
 		if (! line.contains(COMMENT_TYPE_1) && ! line.contains(COMMENT_TYPE_2)) return line.trim();
 
 		String commentType = null;
