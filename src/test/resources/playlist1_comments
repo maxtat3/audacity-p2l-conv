@@ -1,0 +1,7 @@
+# comment in single line in begin line
+00:10	1. abcd # comment in same line thant the audio track separated by TAB character
+05:15	2. def    # comment in same line thant the audio track separated by 4 spaces characters
+07:01	3. ghk    // other example of comment
+05:15	4. efi  # 2 types of comments // in same line
+# comment type 1 in end of file
+// comment type 2 in end of file

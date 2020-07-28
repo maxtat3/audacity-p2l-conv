@@ -31,6 +31,14 @@ public class Converter {
 		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line;
 			while ((line = br.readLine()) != null) {
+				// checks
+				String correctPLLine = checkCorrectPlaylistLine(line);
+				if (! correctPLLine.equals("1")) continue;
+				if (isStartLineWithComment(line)) continue;
+				// end checks
+
+				line = removeComment(line);
+
 				String[] spl = line.split("\\t");
 				audioTracks.add(new AudioTrack(spl[0], spl[1]));
 			}

@@ -1,3 +1,4 @@
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,6 +13,7 @@ public class ConverterTest {
 	 */
 	private static final String PLAYLIST_CORRECT = "src/test/resources/playlist0_correct";
 
+	private static final String PLAYLIST_WITH_COMMENTS = "src/test/resources/playlist1_comments";
 
 	/**
 	 * Correct playlist.
@@ -27,7 +29,16 @@ public class ConverterTest {
 	}
 
 	@Test
-	public void testCalculateTime() {
+	public void testReadAudioTracks_correctPlaylistWithComments() {
+		List<AudioTrack> tracks = new Converter().readAudioTracks(PLAYLIST_WITH_COMMENTS);
+
+		List<AudioTrack> expected = new ArrayList<>();
+		expected.add(new AudioTrack("00:10", "1. abcd"));
+		expected.add(new AudioTrack("05:15", "2. def"));
+		expected.add(new AudioTrack("07:01", "3. ghk"));
+		expected.add(new AudioTrack("05:15", "4. efi"));
+
+		Assert.assertEquals(expected, tracks);
 	}
 
 
