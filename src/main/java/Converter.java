@@ -73,6 +73,21 @@ public class Converter {
 	}
 
 	/**
+	 * Check is playlist text line is correct.
+	 * Checks:
+	 * 1. Length. If line length == 0 return null.
+	 * 2. Contain TAB. Line must be contain \\t character for separate track duration and name.
+	 *
+	 * @param line checking text line
+	 * @return <tt>true</tt> line must be processing, otherwise <tt>false</tt>.
+	 */
+	public String checkCorrectPlaylistLine(String line) {
+		if (line.length() == 0) return "-1";
+		if (! line.contains("\t")) {
+			return "In line [" + line + "] track duration and name must be separated bt TAB character.";
+		}
+		return "1";
+	}
 
 
 	public static final String COMMENT_TYPE_1 = "//";
