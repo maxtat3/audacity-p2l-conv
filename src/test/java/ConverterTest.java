@@ -28,4 +28,63 @@ public class ConverterTest {
 	@Test
 	public void testCalculateTime() {
 	}
+
+
+	/**
+	 * Line not contain any comment.
+	 * But contain spaces in end this line.
+	 */
+	@Test
+	public void testRemoveCommentFromLine_notContainComments(){
+		String a = "0. abcd    ";
+		String res = new Converter().removeComment(a);
+		Assert.assertEquals("0. abcd", res);
+	}
+
+	/**
+	 * Line contain comment type 1 (// - two slashes).
+	 * Comment in same line thant the audio track
+	 */
+	@Test
+	public void testRemoveCommentFromLine_containCommentTwoSlashes(){
+		String a = "1. abcd    // separated by 4 spaces characters";
+		String res = new Converter().removeComment(a);
+		Assert.assertEquals("1. abcd", res);
+	}
+
+	/**
+	 * Line contain comment type 2 (# - hash symbol).
+	 * Comment in same line thant the audio track
+	 */
+	@Test
+	public void testRemoveCommentFromLine_containCommentHash() {
+		String b = "2. def    # other example of comment";
+		String res = new Converter().removeComment(b);
+		Assert.assertEquals("2. def", res);
+	}
+
+	/**
+	 * Line contain comment type 1 and 2 (# and //).
+	 * Sequence: # than // .
+	 * Comment in same line thant the audio track
+	 */
+	@Test
+	public void testRemoveCommentFromLine_containCommentHashThanTwoSlashes() {
+		String b = "3. gfk    # mixed example // of comments";
+		String res = new Converter().removeComment(b);
+		Assert.assertEquals("3. gfk", res);
+	}
+
+	/**
+	 * Line contain comment type 1 and 2 (# and //).
+	 * Sequence: // than # .
+	 * Comment in same line thant the audio track
+	 */
+	@Test
+	public void testRemoveCommentFromLine_containCommentTwoSlashesThanHash() {
+		String b = "4. qtu    // mixed example # of comments in reverse order";
+		String res = new Converter().removeComment(b);
+		Assert.assertEquals("4. qtu", res);
+	}
+
 }

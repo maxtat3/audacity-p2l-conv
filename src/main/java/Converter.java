@@ -73,6 +73,42 @@ public class Converter {
 	}
 
 	/**
+
+	/**
+	 * Remove comments from text line.
+	 * Supported comment symbols: // and #
+	 *
+	 * @param line audio text line
+	 * @return useful text
+	 */
+	public String removeComment(String line) {
+		String COMMENT_TYPE_1 = "//";
+		String COMMENT_TYPE_2 = "#";
+
+		if (! line.contains(COMMENT_TYPE_1) && ! line.contains(COMMENT_TYPE_2)) return line.trim();
+
+		String commentType = null;
+		char chCmType1 = COMMENT_TYPE_1.toCharArray()[0];
+		char chCmType2 = COMMENT_TYPE_2.toCharArray()[0];
+		char[] lineChars = line.toCharArray();
+		for (int i = 0; i < lineChars.length; i++) {
+			char ch = lineChars[i];
+			if (lineChars[i] == chCmType1 && lineChars[i+1] == chCmType1) {
+				commentType = COMMENT_TYPE_1;
+				break;
+			}
+			if (ch == chCmType2) {
+				commentType = COMMENT_TYPE_2;
+				break;
+			}
+		}
+
+		if (commentType != null) line = line.substring(0, line.indexOf(commentType));
+
+		return line.trim();
+	}
+
+	/**
 	 * Save to file as Audacity labels format.
 	 *
 	 * @param tracks all audio tracks received from playlist file.
