@@ -91,19 +91,19 @@ public class ConverterTest {
 	@Test
 	public void testIsStartLineWithComment_inStartNotContainComment() {
 		String s = "00:10\t1. abcd";
-		Assert.assertEquals(false, new Converter().isStartLineWithComment(s));
+		Assert.assertFalse(new Converter().isStartLineWithComment(s));
 	}
 
 	@Test
 	public void testIsStartLineWithComment_inStartTwoSlashes() {
 		String s = "// comment in single line";
-		Assert.assertEquals(true, new Converter().isStartLineWithComment(s));
+		Assert.assertTrue(new Converter().isStartLineWithComment(s));
 	}
 
 	@Test
 	public void testIsStartLineWithComment_inStartHash() {
 		String s = "# comment in single line";
-		Assert.assertEquals(true, new Converter().isStartLineWithComment(s));
+		Assert.assertTrue(new Converter().isStartLineWithComment(s));
 	}
 
 
