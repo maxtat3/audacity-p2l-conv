@@ -42,6 +42,83 @@ public class ConverterTest {
 	}
 
 
+	@Test
+	public void testCalculateTime_1track() {
+		List<AudioTrack> playlist = new ArrayList<>();
+		playlist.add(new AudioTrack("00:15", "Track name"));
+
+		new Converter().calculateTime(playlist, 0L);
+
+		Assert.assertEquals(0, playlist.get(0).getStartTime());
+		Assert.assertEquals(15, playlist.get(0).getEndTime());
+	}
+
+	@Test
+	public void testCalculateTime_5tracks() {
+		List<AudioTrack> playlist = new ArrayList<>();
+		playlist.add(new AudioTrack("00:50", "Track name 1"));
+		playlist.add(new AudioTrack("01:07", "Track name 2"));
+		playlist.add(new AudioTrack("05:51", "Track name 3"));
+		playlist.add(new AudioTrack("01:17", "Track name 4"));
+		playlist.add(new AudioTrack("03:30", "Track name 5"));
+
+		new Converter().calculateTime(playlist, 0L);
+
+		Assert.assertEquals(0, playlist.get(0).getStartTime());
+		Assert.assertEquals(50, playlist.get(0).getEndTime());
+
+		Assert.assertEquals(50, playlist.get(1).getStartTime());
+		Assert.assertEquals(117, playlist.get(1).getEndTime());
+
+		Assert.assertEquals(117, playlist.get(2).getStartTime());
+		Assert.assertEquals(468, playlist.get(2).getEndTime());
+
+		Assert.assertEquals(468, playlist.get(3).getStartTime());
+		Assert.assertEquals(545, playlist.get(3).getEndTime());
+
+		Assert.assertEquals(545, playlist.get(4).getStartTime());
+		Assert.assertEquals(755, playlist.get(4).getEndTime());
+	}
+
+	@Test
+	public void testCalculateTime_3tracksWithStartOffset() {
+		List<AudioTrack> playlist = new ArrayList<>();
+		playlist.add(new AudioTrack("00:55", "Track name"));
+		playlist.add(new AudioTrack("01:29", "Track name"));
+		playlist.add(new AudioTrack("07:31", "Track name"));
+
+		new Converter().calculateTime(playlist, 15L);
+
+		Assert.assertEquals(15, playlist.get(0).getStartTime());
+		Assert.assertEquals(70, playlist.get(0).getEndTime());
+
+		Assert.assertEquals(70, playlist.get(1).getStartTime());
+		Assert.assertEquals(159, playlist.get(1).getEndTime());
+
+		Assert.assertEquals(159, playlist.get(2).getStartTime());
+		Assert.assertEquals(610, playlist.get(2).getEndTime());
+	}
+
+	@Test
+	public void testCalculateTime_3tracksLongDuration() {
+		List<AudioTrack> playlist = new ArrayList<>();
+		playlist.add(new AudioTrack("30:15", "Track name"));
+		playlist.add(new AudioTrack("55:17", "Track name"));
+		playlist.add(new AudioTrack("29:11", "Track name"));
+
+		new Converter().calculateTime(playlist, 0L);
+
+		Assert.assertEquals(0, playlist.get(0).getStartTime());
+		Assert.assertEquals(1815, playlist.get(0).getEndTime());
+
+		Assert.assertEquals(1815, playlist.get(1).getStartTime());
+		Assert.assertEquals(5132, playlist.get(1).getEndTime());
+
+		Assert.assertEquals(5132, playlist.get(2).getStartTime());
+		Assert.assertEquals(6883, playlist.get(2).getEndTime());
+	}
+
+
 	/**
 	 * Line not contain any comment.
 	 * But contain spaces in end this line.
