@@ -168,18 +168,19 @@ public class Converter {
 	}
 
 	/**
-	 * Save to file as Audacity labels format.
+	 * Prepare contain of file in Audacity labels format.
 	 *
 	 * @param tracks all audio tracks received from playlist file.
+	 * @return string contained all necessary text data will be saved to file.
 	 */
-	public void saveAsAudacityLabels(List<AudioTrack> tracks) {
+	public String prepareLabels(List<AudioTrack> tracks) {
 		String text = "";	// could be applied StringBuilder, but not necessary, low size text data processed.
 		for (AudioTrack track : tracks) {
 			text += track.getStartTime() + "\t"
 				+ track.getEndTime() + "\t"
 				+ track.getName() + "\n";
 		}
-		Util.writeToFile("audacity-labels", text);
+		return text;
 	}
 
 }

@@ -295,4 +295,29 @@ public class ConverterTest {
 		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
 	}
 
+
+	/*
+	 * Note. In this test case call also {@link Converter#calculateTime(List, long)} which is tested in a separated tests.
+	 */
+	@Test
+	public void testPrepareLabels() {
+		List<AudioTrack> playlist = new ArrayList<>();
+		playlist.add(new AudioTrack("00:50", "Track name 1"));
+		playlist.add(new AudioTrack("01:07", "Track name 2"));
+		playlist.add(new AudioTrack("05:51", "Track name 3"));
+		playlist.add(new AudioTrack("01:17", "Track name 4"));
+		playlist.add(new AudioTrack("03:30", "Track name 5"));
+
+		Converter conv = new Converter();
+		conv.calculateTime(playlist, 0);
+		String res = conv.prepareLabels(playlist);
+
+		String expected = "0\t50\tTrack name 1\n" +
+			"50\t117\tTrack name 2\n" +
+			"117\t468\tTrack name 3\n" +
+			"468\t545\tTrack name 4\n" +
+			"545\t755\tTrack name 5\n";
+
+		Assert.assertEquals(expected, res);
+	}
 }

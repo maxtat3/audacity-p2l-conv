@@ -18,7 +18,8 @@ public class App {
 		try {
 			List<AudioTrack> audioTracks = conv.readAudioTracks(args[0]);
 			conv.calculateTime(audioTracks, 0);
-			conv.saveAsAudacityLabels(audioTracks);
+			String text = conv.prepareLabels(audioTracks);
+			Util.writeToFile("audacity-labels", text);
 		} catch (DataFormatException e) {
 			System.exit(1);
 		}
