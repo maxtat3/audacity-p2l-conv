@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.zip.DataFormatException;
+
 /**
  * Main class of app.
  */
@@ -5,8 +8,16 @@ public class App {
 
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			Util.print("Not passed arguments");
 			Util.print(showHelp());
+			System.exit(1);
+		}
+
+		Converter conv = new Converter();
+		try {
+			List<AudioTrack> audioTracks = conv.readAudioTracks(args[0]);
+			conv.calculateTime(audioTracks, 0);
+			conv.saveAsAudacityLabels(audioTracks);
+		} catch (DataFormatException e) {
 			System.exit(1);
 		}
 	}
