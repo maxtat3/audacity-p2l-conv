@@ -9,6 +9,30 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    archiveName = "audacity-p2l-conv.jar"
+    from {
+        configurations.runtime.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+
+    manifest {
+        attributes 'Main-Class': 'App'
+    }
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+}
+
+task(runApp, dependsOn: 'classes', type: JavaExec) {
+    main = 'App'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
