@@ -51,13 +51,14 @@ public class Converter {
 
 	/**
 	 * Calculate time range - start and end positions for all audio tracks.
-	 * Nothing returned, but only set {@link AudioTrack#startTime} and {@link AudioTrack#endTime} in all audio tracks.
+	 * Method nothing returned, but modified {@link AudioTrack#startTime}
+	 * and {@link AudioTrack#endTime} in all audio tracks.
 	 *
 	 * @param tracks all audio tracks received from playlist file.
 	 * @param offsetTime offset at start (in seconds).
 	 */
 	public void calculateTime(List<AudioTrack> tracks, long offsetTime) {
-		long prevTrackStartTimeMs = offsetTime;
+		long prevTrackStartTimeMs = offsetTime * 1000;
 
 		for (AudioTrack track : tracks) {
 			try {
