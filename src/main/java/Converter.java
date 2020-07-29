@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.DataFormatException;
 
 /**
  * Converting human readable playlist to Audacity labels format.
@@ -26,21 +27,25 @@ public class Converter {
 	 * @param file absolute path to playlist file contained audio tracks in human readable format.
 	 * @return list of POJO audio tracks files
 	 */
-	public List<AudioTrack> readAudioTracks(String file) {
+	public List<AudioTrack> readAudioTracks(String file) throws DataFormatException{
 		List<AudioTrack> audioTracks = new ArrayList<>();
 		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line;
 			while ((line = br.readLine()) != null) {
-				// checks
 				String correctPLLine = checkCorrectPlaylistLine(line);
 				if (! correctPLLine.equals("1")) continue;
 				if (isStartLineWithComment(line)) continue;
-				// end checks
 
 				line = removeComment(line);
 
 				String[] spl = line.split("\\t");
-				audioTracks.add(new AudioTrack(spl[0], spl[1]));
+				if (validateTimeFormatMMSS(spl[0])) {
+					audioTracks.add(new AudioTrack(spl[0], spl[1]));
+				} else {
+					throw new DataFormatException("Audio track [" + line + "] is in the wrong time format.");
+				}
+
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -79,6 +84,25 @@ public class Converter {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * Validate time for format mm:ss (minutes : seconds).
+	 *
+	 * @param time validation string given time
+	 * @return <tt>true</tt> - correct format given in time var, otherwise <tt>false</tt>
+	 */
+	public boolean validateTimeFormatMMSS(String time) {
+		boolean isValidLen = false;
+		if (time.length() == 5) isValidLen = true;
+
+		boolean isPresentDelimiter = false;
+		if (time.toCharArray()[2] == ':') isPresentDelimiter = true;
+
+		// https://www.regular-expressions.info/numericranges.html
+		boolean isMatchTime = time.matches("(^[0-5]?[0-9]):([0-5]?[0-9]$)");
+
+		return isValidLen && isPresentDelimiter && isMatchTime;
 	}
 
 	/**

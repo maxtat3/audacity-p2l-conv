@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 public class ConverterTest {
 
@@ -15,11 +16,14 @@ public class ConverterTest {
 
 	private static final String PLAYLIST_WITH_COMMENTS = "src/test/resources/playlist1_comments";
 
+	public static final String PLAYLIST_WITH_LINE_WRONG_DATE_FORMAT = "src/test/resources/playlist2_lineInWrongDateFormat";
+
+
 	/**
 	 * Correct playlist.
 	 */
 	@Test
-	public void testReadAudioTracks_correctPlaylist() {
+	public void testReadAudioTracks_correctPlaylist() throws DataFormatException {
 		List<AudioTrack> tracks = new Converter().readAudioTracks(PLAYLIST_CORRECT);
 		List<AudioTrack> expected = new ArrayList<>();
 		expected.add(new AudioTrack("03:10", "1. Allegro in A major"));
@@ -29,7 +33,7 @@ public class ConverterTest {
 	}
 
 	@Test
-	public void testReadAudioTracks_correctPlaylistWithComments() {
+	public void testReadAudioTracks_correctPlaylistWithComments() throws DataFormatException {
 		List<AudioTrack> tracks = new Converter().readAudioTracks(PLAYLIST_WITH_COMMENTS);
 
 		List<AudioTrack> expected = new ArrayList<>();
@@ -39,6 +43,11 @@ public class ConverterTest {
 		expected.add(new AudioTrack("05:15", "4. efi"));
 
 		Assert.assertEquals(expected, tracks);
+	}
+
+	@Test (expected = DataFormatException.class)
+	public void testReadAudioTracks_wrongDateFormat() throws DataFormatException {
+		new Converter().readAudioTracks(PLAYLIST_WITH_LINE_WRONG_DATE_FORMAT);
 	}
 
 
@@ -225,5 +234,65 @@ public class ConverterTest {
 		Assert.assertEquals("1", res);
 	}
 
+
+	@Test
+	public void testValidateTimeFormatMMSS_correctTime() {
+		String s = "00:07";
+		Assert.assertTrue(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_wrongSeconds() {
+		String s = "03:71";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_wrongMinutes() {
+		String s = "71:11";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_lessNumbersInSeconds() {
+		String s = "03:5";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_lessNumbersInMinutes() {
+		String s = "3:55";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_largerNumbersInSeconds() {
+		String s = "03:551";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_largerNumbersInMinutes() {
+		String s = "033:51";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_textInSeconds() {
+		String s = "71:ae";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_textInMinutes() {
+		String s = "at:11";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
+
+	@Test
+	public void testValidateTimeFormatMMSS_wrongDelimiters() {
+		String s = "05a17";
+		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+	}
 
 }
