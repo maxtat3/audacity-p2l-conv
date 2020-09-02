@@ -94,10 +94,10 @@ public class Converter {
 	 */
 	public boolean validateTimeFormatMMSS(String time) {
 		boolean isValidLen = false;
-		if (time.length() == 5) isValidLen = true;
+		if (time.length() == 4 || time.length() == 5) isValidLen = true;	// for allow 3:02 and 03:02
 
 		boolean isPresentDelimiter = false;
-		if (time.toCharArray()[2] == ':') isPresentDelimiter = true;
+		if (time.toCharArray()[1] == ':' || time.toCharArray()[2] == ':') isPresentDelimiter = true;	// for allow 3:02 and 03:02
 
 		// https://www.regular-expressions.info/numericranges.html
 		boolean isMatchTime = time.matches("(^[0-5]?[0-9]):([0-5]?[0-9]$)");

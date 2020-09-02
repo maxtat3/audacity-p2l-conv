@@ -256,13 +256,13 @@ public class ConverterTest {
 	@Test
 	public void testValidateTimeFormatMMSS_lessNumbersInSeconds() {
 		String s = "03:5";
-		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+		Assert.assertTrue(new Converter().validateTimeFormatMMSS(s));
 	}
 
 	@Test
 	public void testValidateTimeFormatMMSS_lessNumbersInMinutes() {
 		String s = "3:55";
-		Assert.assertFalse(new Converter().validateTimeFormatMMSS(s));
+		Assert.assertTrue(new Converter().validateTimeFormatMMSS(s));
 	}
 
 	@Test
@@ -317,6 +317,22 @@ public class ConverterTest {
 			"117\t468\tTrack name 3\n" +
 			"468\t545\tTrack name 4\n" +
 			"545\t755\tTrack name 5\n";
+
+		Assert.assertEquals(expected, res);
+	}
+
+	@Test
+	public void testPrepareLabelsWithoutStartZeroInMMSS() {
+		List<AudioTrack> playlist = new ArrayList<>();
+		playlist.add(new AudioTrack("1:50", "Track name 1"));
+		playlist.add(new AudioTrack("00:5", "Track name 2"));
+
+		Converter conv = new Converter();
+		conv.calculateTime(playlist, 0);
+		String res = conv.prepareLabels(playlist);
+
+		String expected = "0\t110\tTrack name 1\n" +
+			"110\t115\tTrack name 2\n";
 
 		Assert.assertEquals(expected, res);
 	}
